@@ -1,0 +1,26 @@
+This is a simple backup script for Linux dedicated servers to back up a specific directory and all of it's sub directories and save them in your backup FTP storage, organized by date.
+ 
+1. Download lftp using the command: yum install lftp (CentOS) or apt-get install lftp (Debian and Ubuntu)
+2. Have a directory in the root of the back up FTP named "backup"
+3. Modify the script bellow with your credentials and settings:
+ 
+#!/bin/bash
+### FTP login credentials bellow ###
+FTPU="FTP-Username"
+FTPP="FTP-Password"
+FTPS="FTP-IP-Address"
+ 
+NOW=$(date +"%d-%m-%Y")
+ 
+### local directory to backup ###
+FILE="/DIR-to-Backup"
+ 
+### Login to remote server ###
+### No need to edit any of the fields bellow ###
+### Default DIR is backup ###
+lftp -u $FTPU,$FTPP -e "cd backup;mkdir $NOW;cd $NOW;mirror -R $FILE /backup/$NOW;quit" $FTPS
+ 
+4. Save the script as backup.sh and run "chmod +x ./backup.sh" to make into an executable.
+5. run the back up script by typing ./backup.sh
+ 
+The script can be scheduled as a cron job for automated backups on a specific frequency.
